@@ -1,0 +1,520 @@
+<html>
+<style>
+ h1
+{
+  text-align: center;
+  color:8458B3;
+}
+h2
+{
+color:#51e2f5;
+}
+</style>
+
+<h1> AWS SysOps Adminstrator Demo Documentation</h1>
+<h1>Section-Deployment,Provisioning and Automation</h1>
+<h2>Deploying an elastic compute cloud instance</h2>
+<ul>
+<li>Name-MyWebServer</li>
+<li>AMI-Amazon Linux </li>
+<li>Instance type- t3.micro</li>
+<li>Key pair- proceed without a key pair</li>
+<li>Network settings - Allow SSH,HTTP and HTTPS</li>
+<li>Advanced details - Add the bootstrap script and click Launch instance
+</li><ol><li>#!/bin/bash</li>
+<li>sudo su -</li>
+<li>dnf update -y</li>
+<li>dnf install httpd -y</li>
+<li>echo "htmlbodyh1Hello Cloud Gurus - This web page is being served from EC2." >/var/www/html/index.html</li>
+<li>systemctl start httpd</li>
+<li>systemctl enable httpd</li>
+<li>Connect to the instance and type the script</li>
+<li>Copy the public IPv4 address and see if the webserver is launched </li></ol>
+</ul>
+
+<h2>Deploying an Elastic LoadBalancer,understanding Cloudwatch metrics,ELB access logs</h2>
+<ol>
+Procedure:
+<li>Launch 2 EC2 instances</li>
+<li>Create an ELB</li>
+<li>Access the website using DNS address of ELB</li>
+<li>Create 2 EC2 instances </li>
+<li>Create an ELB and register 2 EC2 instances as targets and add the target group </li>
+<li>Type:ALB</li>
+<li>Scheme-internet facing</li>
+<li>Mappings- select subnets of 2 ec2 instances </li>
+<li>Security grp - same as ec2 </li>
+<li>Listener: http and port 80</li>
+<li>Create Target grp - choose the instances, path- /index.html and click include as pending and create</li>
+<li>Then create ELB</li>
+<li>Copy DNS name and paste to generate some traffic. Check using cloudwatch to monitor metrics like host count,req count etc</li>
+<li>Create Access logs </li>
+Create an s3 bucket 
+Add bucket policy and replace your bucket arn in this code
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::127311923021:root"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::my-elb-access-logs-67954/*"
+        }
+    ]
+}
+</ol>
+<h2>Creating an AMI using EC2 Image builder </h2>
+<ol>
+<li>Create an IAM Role- add permissions for EC2 image builder</li>
+<li>Create an Image Pipeline - define config settings</li>
+<li>Execute the pipeline - launch temporary build and test ec2 instances </li>
+<li>View the image- view the image in image builder under amis</li>
+IAM
+<li>Roles</li>
+<li>Trusted Entity type- AWS Service </li>
+<li>Use Case- EC2 next</li>
+<li>Permission - EC2intanceforimagebuilder, AmazonSSManaged instanceCore</li>
+<li>Give a name Create role</li>
+EC2 Image builder
+<li>Name</li>
+<li>dont enable enhanced metadata collection</li>
+<li>Build schedule- Manual</li>
+<li>Choose recipe- Create new</li>
+<li>Image type- AMI</li>
+<li>Genreal recipe name,version - 1.0.0</li>
+<li>Base image- Select managed images </li>
+<li>Image OS- Amazon Linux</li>
+<li>Image origin- quick start</li>
+<li>image name- x86 </li>
+<li>Auto versioning - use lastest available os version</li>
+<li>instance config - remove ssm agent</li>
+<li>work direc - /tmp</li>
+<li>Components - update-linux, test Components- simple-boot-test-linux</li> 
+<li>Infrastructure config - Create new infra config</li>
+<li>Name</li>
+<li>IAM role- choose the created role</li>
+<li>Instance type- t3</li>
+<li>Distribution settings- us-east-1</li>
+<li>Review all and create pipeline</li>
+<li>Select pipeline and click Run</li>
+<li>Go to EC2 and see 2 instances getting launched </li>
+<li>EC2,AMI and image builder</li>
+<li>Base OS,S/W to install and Test it and distribute to the region</li>
+</ol>
+
+<h2>Provisioning AWS resources using CloudFormation</h2>
+<ul>
+    <li>Create and Download SSH key pair to log in to the instance</li>
+    <li>Create a CloudFormation stack to provision an ec2 instance with SSH access enabled</li>
+    <li>EC2-key pairs, Region- Northern Virginia, key pair type-RSA, file format - .pem and click create</li>
+    <li>Clouformation- Create stack with new template</li>
+    <li>Prepare template- Template is ready</li>
+    <li>Download and save the template</li>
+    <li>Upload the template file</li>
+    <li>Copy the generated s3 url</li>
+    <li>Enter stack name and select key pair</li>
+    <li>Review and submit</li>
+    <li>A security group and an ec2 instance gets created</li>
+    <li>Copy the public ip and try connecting to the ec2 instance</li>
+    <li>Delete the cloudformation stack</li>
+</ul>
+<h2>CloudFormation Errors</h2>
+<ul>
+    <li>Create and download an SSH key pair</li>
+    <li>Launch a cloudformation stack</li>
+    <li>After the stack has failed, use the status message to determine what went wrong</li>
+    <li>EC2- Create a key pair</li>
+    <li>Create a cloudfromation stack</li>
+    <li>Prepare template- Template is ready</li>
+    <li>Download and save the template</li>
+    <li>Upload the template file</li>
+    <li>Copy the generated s3 url</li>
+    <li>Enter stack name and select key pair</li>
+    <li>Review and submit</li>
+
+</ul>
+<h2>Implementing Automated Patching using AWS Systems Manager</h2>
+<ul>
+<li>Create an IAM Role and attach the SSMManagedInstanceCore policy</li>
+<li>Launch an ec2 instance and attach the created role</li>
+<li>Open systmes manager console and find the created instance</li>
+<li>Use Patch manager to scan and install any missing patches</li>
+<li>IAM-Role-AWS Service,EC2 and select the ssm policy</li>
+<li>EC2-amazon linux,t3.micro,no key pair, adv details- iam instance profile- select the created role</li>
+<li>Systems Manager -> Fleet Manager</li>
+<li>Select Patch manager</li>
+<li>Patch baseline - amazon linux 2023 and give patch now</li>
+<li>Scan and install </li>
+<li>Reboot if needed</li>
+<li>Patch all instances</li>
+<li>Donot store logs</li>
+<li>Select Patch now</li>
+<li>Terminate the instance</li>
+
+</ul>
+<h2>Using AWS Systems Manager EC2 Run Command</h2>
+<ul>
+    <li>Create an IAM role- SSMManagedInstanceCore</li>
+    <li>Launch 2 EC2 instances with the role created</li>
+    <li>Using systems manager, run a simple command on the ec2 instances</li>
+    <li>IAM- create role</li>
+    <li>Create 2 EC2 instances and select the role</li>
+    <li>Systmes Manager -> Node Manager -> Run Command</li>
+    <li>Platform types:Linux , search shell</li>
+    <li>AWS Run shell script</li>
+    <li>ifconfig -g</li>
+    <li>timeout:3600</li>
+    <li>Target selection- choose manually</li>
+    <li>select the 2 instances </li>
+    <li>disable writing to s3 bucket</li>
+    <li>Click Run</li>
+    <li>Select the instance to view the output</li>  
+</ul>
+<h1>Section-Monitoring Logging and Remediation</h1>
+<h2>Creating Cloudwatch Dashboards</h2>
+<ul>
+<li>Launch an EC2 instance and generate some activity on our instance to create some metrics</li>
+<li>Create a Cloudwatch Dashboard and explore the metircs available</li>
+<li>EC2-name,Amazon linux, t3.micro,no key pair and launch</li>
+<li>Connect to the instance</li>
+<li>Enter the code while true; do echo; done</li>
+<li>Cloudwatch-Create custom dashboard</li>
+<li>Widget- Line graph , Metrics</li>
+<li>select ec2 -> per instance metrics -> paste instance id </li>
+<li>Select cpu utilization,networkpackets in and out and create widget</li>
+<li>Multi region can also be selected to create dashboard</li>
+</ul>
+<h2>Collecting Metrics and Logs using Cloudwatch agent</h2>
+<ul>
+<li>IAM -> Role -> EC2 -> Cloudwatchagentserverpolicy </li>
+<li>Create an EC2 instance with role attached</li>
+<li>Write the bootstrap script</li>
+<li>stats d yes
+    aggregation: 10 sec
+    collectd 2 
+    monitor host yes
+    cpu 
+    yes 
+    ec2 yes
+    high resolu - 1
+    standard metric 2 
+    satisfied 1
+    existing cloudwatch - 2
+    monitor log files - 1
+    log file path - /var/log/messages
+    log group retention - 2
+    any add log file - 2
+    dont store - 2
+    after configuring
+    cd /opt/aws/amazon-cloudwatch-agent/bin
+    ls
+    cat config.json
+    
+    start the cloudwatch agent - enter the command
+    config validation succeeded
+    install stress 
+    stress --cpu 1
+    go to cloudwatch
+    Mterics-> all metrics -> instance id
+    select cpu usage user
+    all -> ec2 -> per instance metrics
+    Logs -> log grps -> messages -> log stream and see the log messages </li>
+<li>Connect to instance and run the commands</li>
+<li></li>
+</ul>
+<h2>Creating Cloudwatch Metric filters</h2>
+<ul>
+<li>Create a basic lambda func and enable it to send logs to cloudwatch</li>
+<li>Test function which generates some log events</li>
+<li>Explore how to monitor for specific terms or values appearing in our logs</li>
+<li>Create a metric filter that will ause cloudwatch to alert if any error appears in the log</li>
+<li>Lambda -> Create function , Author from scratch , enter name and create</li>
+<li>Code source- update the message and deploy</li>
+<li>Configure test event- enter name and save and test it few times </li>
+<li>Cloudwatch -> logs -> log group -> log stream</li>
+<li>Log group -> actions -> create metric filter</li>
+<li>Filter pattern -> Duration and test pattern by selecting the log data</li>
+<li>filter name - error filter , pattern - error</li>
+<li>give name, name space 1,0 and create</li>
+<li>lambda -> code source -> remove last line and test few times </li>
+<li>Cloudwatch -> metric filter -> select the error metric and set timeline to 1 hr and refresh</li>
+
+
+</ul>
+<h2>Exploring Cloudwatch Log Insights </h2>
+<ul>
+    <li>Create a basic lambda function</li>
+<li>Test the simple function few times to generate Logs</li>
+<li>Use cloudwatch insights and query the data </li>
+<li>Lambda -> author from scratch,name,func code , deploy and test few times </li>
+<li>Cloudwatch -> logs -> insights -> select the log group and run the sample query </li>
+<li>Right side -> query -> lambda -> select the query apply and run </li>
+<li>Click visualization - enter the query given last 4 hrs</li>
+
+</ul>
+<h2>Creating Cloudwatch alarms</h2>
+<ul>
+<li>Launch ec2 instance and enable detailed monitoring</li>
+<li>Create a cloudwatch alarm - if cpu utilization > 90% for 1 minute</li>
+<li>configure email alert using sns if alarm is triggered</li>
+<li>Run a command to max out CPU. this should trigger the alarm</li>
+<li>EC2 -> name, t3.micro,no key pair, advanced details , enable detailed cloudwatch monitoring </li>
+<li>Cloudwatch -> Alarms -> Create alarm, select instance id , ec2 per instance metrics and select cpu utilization </li>
+<li>Name , id , period - i minute </li>
+<li>Threshold type static , greater than, 90</li>
+<li>Notification - alarm state trigger - in alarm </li>
+<li>Create a new topic - name, email and create </li>
+<li>Give alarm a name and create </li>
+<li>go to gamil and subscribe to the topic </li>
+<li>for i in 1 2 3 4; do while : ; do : ; done & done </li>
+<li>Cloudwatch -> in alarm -> see the alert -> see the email </li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+
+</ul>
+<h2>Working with Cloudtrail</h2>
+<ul>
+<li>Review past 90 days event history</li>
+<li>Create a multi-region trail to store encrypted cloud trail logs in s3 bucket</li>
+<li>See logs appear in s3</li>
+<li>Cloudtrail -> event history </li>
+<li>Select an event and download as CSV</li>
+<li>Trails-> create, name, create new s3 bucket, new kms alias next </li>
+<li>Event type - management events , read and write and Create</li>
+<li>select the s3 bucket -> cloudtrail -> us east 2 -> then open all folders and see the trail </li>
+<li>Delete the trail </li>
+<li></li>
+<li></li>
+
+</ul>
+<h2>Using AWS Config</h2>
+<ul>
+    <li>Create an s3 bucket </li>
+<li>Create an aws config rule that checks if bucket versioning is enabled </li>
+<li>We will use the managed rule </li>
+<li>Config should report that our bucket is non - compliant</li>
+<li>s3 -> enter name and create</li>
+<li>Config -> 1 click setup and click confirm</li>
+<li>Rules -> add rule -> aws managed rule</li>
+<li>search  versioning and select the s3 versioning</li>
+<li>Select the rule -> actions -> re evaluate </li>
+<li>Go to dashboard and see the non compliant resources </li>
+</ul>
+<h2>Configuring Automatic Remediation using AWS Systems Manager and AWS Config</h2>
+<ul>
+    <li>Launch 2 EC2 instances - 1 linux, 1 red hat </li>
+<li>Create a config rule that checks if all the instances are running linux</li>
+<li>After check, if any resource is non compliant, stop it</li>
+<li>IAM role->AmazonSSMAutomation role, inline policy and trusted policy</li>
+<li>EC2- one amazon linux and one red hat linux</li>
+<li>Copy the ami id </li>
+<li>Copy the script from resources </li>
+<li>Click cloudshell and enter - curl -o roleconfig.sh https://raw.githubusercontent.com/ACloudGuru-Resources/course-aws-sysops-administrator-associate/main/Automation_With_AWS_Config_Demo/roleconfig.sh</li>
+<li>click enter and ls </li>
+<li>chmod u+x roleconfig.sh </li>
+<li>./roleconfig.sh</li>
+<li>AWS config -> rules -> add aws managed rule -> approved-amis-BY-id </li>
+<li>enter name, parameter amiids and value and add rule</li>
+<li>Select rule -> actions -> evaluate </li>
+<li>select rule -> actions -> manage Remediation -> auto Remediation -> terminateec2instance </li>
+<li>Resoruce id - enter the instance id and paste the arn</li>
+<li>select the remedy and click remediate </li>
+<li>Go to ec2 and check </li>
+<li></li>
+<li></li>
+</ul>
+<h2>Using Amazon Eventbridge</h2>
+<ul>
+    <li>Launch ec2 instance </li>
+<li>Create ss topic and subscribe </li>
+<li>Create an eventbridge rule to notify ec2 state changes using sns </li>
+<li>Stop the instance if we recieve any email notification </li>
+<li>EC2- Launch instance </li>
+<li>SNS- create topic -> standard , name and create </li>
+<li>Subscriptions - create , protocol - email - endpoint - email id</li>
+<li>subscribe the email</li>
+<li>eventbridge -> rules -> event bus default and create </li>
+<li>Rule detail - name,rule with event pattern </li>
+<li>Event pattern -> aws service -> ec2 -> event type -> state-change notification , any state next </li>
+<li>Target 1 - aws service , type sns topic and select the create topic and create rule </li>
+<li>EC2 -> INSTANCE STATE -> stop and check email </li>
+<li>Go to cloudwatch and see the rule </li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<h2>Scheduling Automated tasks using Eventbridge and AWS Config</h2>
+<ul>
+    <li>Create an AWS config rule that checks all instances are created without public ip address</li>
+<li>Suscribe to sns topic using email</li>
+<li>Eventbridge rue will trigger ans sns notification whenever a config rules compliance change is detected</li>
+<li>Config -> 1 click setup -> Rules -> add a rule -> aws managed rule -> no-public-ip ,add rule</li>
+<li>SNS -> create std topic, name and create </li>
+<li>Create subcription and accept in email </li>
+<li>Eventbridge -> Create rule -> name aws service -> config , event type - coppliance change, target - sns topic and select your topic and create rule </li>
+<li>EC2- launch instance </li>
+<li>Config -> shows i non compliant resource </li>
+<li>Also should have received an email </li>
+</ul>
+<h2>Exploring Amazon Health Dashboard</h2>
+<ul>
+    <li>View the status of all AWS services </li>
+<li>Exlpore Account health - view issues with services </li>
+<li>Health -> open and recent issues , change dates and look, regions</li>
+<li>View event logs </li>
+<li>see affected resources </li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
