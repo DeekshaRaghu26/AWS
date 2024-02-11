@@ -191,38 +191,37 @@ EC2 Image builder
 <li>IAM -> Role -> EC2 -> Cloudwatchagentserverpolicy </li>
 <li>Create an EC2 instance with role attached</li>
 <li>Write the bootstrap script</li>
-<li>stats d yes
-    aggregation: 10 sec
-    collectd 2 
-    monitor host yes
-    cpu 
-    yes 
-    ec2 yes
-    high resolu - 1
-    standard metric 2 
-    satisfied 1
-    existing cloudwatch - 2
-    monitor log files - 1
-    log file path - /var/log/messages
-    log group retention - 2
-    any add log file - 2
-    dont store - 2
-    after configuring
-    cd /opt/aws/amazon-cloudwatch-agent/bin
-    ls
-    cat config.json
+<li>stats d yes</li>
+    <li>aggregation: 10 sec</li>
+    <li>collectd 2 </li>
+    <li>monitor host yes</li>
+    <li>cpu yes </li>
+    <li>ec2 yes</li>
+    <li>high resolu - 1</li>
+    <li>standard metric 2 </li>
+    <li>satisfied 1</li>
+    <li>existing cloudwatch - 2</li>
+    <li>monitor log files - 1</li>
+    <li>log file path - /var/log/messages</li>
+    <li>log group retention - 2</li>
+    <li>any add log file - 2</li>
+    <li>dont store - 2</li>
+    <li>after configuring</li>
+    <li>cd /opt/aws/amazon-cloudwatch-agent/bin </li>
+    <li> ls</li>
+    <li> cat config.json</li>
     
-    start the cloudwatch agent - enter the command
-    config validation succeeded
-    install stress 
-    stress --cpu 1
-    go to cloudwatch
-    Mterics-> all metrics -> instance id
-    select cpu usage user
-    all -> ec2 -> per instance metrics
-    Logs -> log grps -> messages -> log stream and see the log messages </li>
+    start the cloudwatch agent - enter the command </li>
+    config validation succeeded</li>
+    <li>install stress </li>
+    <li>stress --cpu 1</li>
+    <li>go to cloudwatch</li>
+    <li> Mterics-> all metrics -> instance id</li>
+    <li> select cpu usage user</li>
+    <li> all -> ec2 -> per instance metrics</li>
+    <li> Logs -> log grps -> messages -> log stream and see the log messages </li>
 <li>Connect to instance and run the commands</li>
-<li></li>
+
 </ul>
 <h2>Creating Cloudwatch Metric filters</h2>
 <ul>
@@ -262,7 +261,7 @@ EC2 Image builder
 <li>Run a command to max out CPU. this should trigger the alarm</li>
 <li>EC2 -> name, t3.micro,no key pair, advanced details , enable detailed cloudwatch monitoring </li>
 <li>Cloudwatch -> Alarms -> Create alarm, select instance id , ec2 per instance metrics and select cpu utilization </li>
-<li>Name , id , period - i minute </li>
+<li>Name , id , period - 1 minute </li>
 <li>Threshold type static , greater than, 90</li>
 <li>Notification - alarm state trigger - in alarm </li>
 <li>Create a new topic - name, email and create </li>
@@ -270,11 +269,6 @@ EC2 Image builder
 <li>go to gamil and subscribe to the topic </li>
 <li>for i in 1 2 3 4; do while : ; do : ; done & done </li>
 <li>Cloudwatch -> in alarm -> see the alert -> see the email </li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
 
 </ul>
 <h2>Working with Cloudtrail</h2>
@@ -288,8 +282,7 @@ EC2 Image builder
 <li>Event type - management events , read and write and Create</li>
 <li>select the s3 bucket -> cloudtrail -> us east 2 -> then open all folders and see the trail </li>
 <li>Delete the trail </li>
-<li></li>
-<li></li>
+
 
 </ul>
 <h2>Using AWS Config</h2>
@@ -325,8 +318,7 @@ EC2 Image builder
 <li>Resoruce id - enter the instance id and paste the arn</li>
 <li>select the remedy and click remediate </li>
 <li>Go to ec2 and check </li>
-<li></li>
-<li></li>
+
 </ul>
 <h2>Using Amazon Eventbridge</h2>
 <ul>
@@ -344,12 +336,7 @@ EC2 Image builder
 <li>Target 1 - aws service , type sns topic and select the create topic and create rule </li>
 <li>EC2 -> INSTANCE STATE -> stop and check email </li>
 <li>Go to cloudwatch and see the rule </li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
+
 </ul>
 <h2>Scheduling Automated tasks using Eventbridge and AWS Config</h2>
 <ul>
@@ -378,6 +365,232 @@ EC2 Image builder
 <li></li>
 </ul>
 
+<h1> Section- Storage and Data Management</h1>
+<h2>Creating an S3 bucket</h2>
+<ul>
+    <li>Create an S3 bucket</li>
+    <li>Upload a file from local machine </li>
+    <li>Configure public read access for our bucket and our file </li>
+    <li>S3- bucket name</li>
+    <li>Disable block all public access</li>
+    <li>Edit bucket policy -> Policy generator</li>
+    <li>Type - s3 bucket</li>
+    <li>Effect - Allow</li>
+    <li>Principal - *</li>
+    <li>Actions- get obj, get obj version</li>
+    <li>Paste ARN/*</li>
+    <li>Add statement and click generate policy. Copy the policy</li>
+    <li>Paste the policy and save</li>
+    <li></li>
+</ul>
+<h2>Configuring static website hosting using S3</h2>
+<ul>
+    <li>Create S3 bucket and allow public access and create bucket policy</li>
+    <li>upload an html and check for access</li>
+    <li>Bucket - name,uncheck block public access</li>
+    <li>Select bucket -> Permissions -> Edit bucket policy</li>
+    <li>Generate policy - same as before</li>
+    <li>Upload an html file as object</li>
+    <li>Properties -> Static website hosting </li>
+    <li>Enable , host type - static website and save changes </li>
+    <li>Click the statc website URL</li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<h2>Configuring encryption on an S3 bucket</h2>
+<ul>
+    <li>Create a s3 bucket</li>
+    <li>Review the server-side encryption options</li>
+    <li>Test - upload a file and check that our file was encrypted </li>
+    <li>S3- create bucket - name, enable encryption </li>
+    <li>Permissions - Edit bucket policy</li>
+    <li>type of policy - bucket policy</li>
+    <li>effect - deny</li>
+    <li>principal - *</li>
+    <li>action - put object</li>
+    <li>copy and paste bucket arn/*</li>
+    <li>condition string not equals aws:server side encryption</li>
+    <li>value : aws:kms </li>
+    <li>Copy paste the created policy</li>
+    <li>Upload a file and dont select encryption - it fails </li>
+</ul>
+<h2>Working with EFS</h2>
+<ul>
+    <li>Create anEFS file system- encryption is enabled by default</li>
+    <li>Launch an ec2 instance and install efs utilities </li>
+    <li>Create new directory on the instance, mount the efs file system to the new directory and create a file </li>
+    <li>EFS-> name, default vpc</li>
+    <li>Transition into IA - 30 days </li>
+    <li>Select enforce in transit encryption and click create </li>
+    <li>elect file system and click attach</li>
+    <li>Launch EC2 - create security grp </li>
+    <li>EFS - network tab, note the sg id </li>
+    <li>SG - edit inbound rules - type - NFS, Source- select the sec grp of ec2 instance and save </li>
+    <li>Connect to EC2</li>
+    <li>sudo dnf intall -y amazon-efs-utils</li>
+    <li>sudo mkdir efs </li>
+    <li>cmd to mount file system check df -T </li>
+    <li>cd efs/</li>
+    <li>sudo touch test.txt </li>
+    <li>ls </li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<h2>Working with Athena</h2>
+<ul>
+    <li>Create a trail and it will generate logs </li>
+    <li>It will store the logs in new s3 bucket </li>
+    <li>Use sql to query the data stored in s3</li>
+    <li>CloudTrail- Create trail- Name, Create new s3 bucket, new kms key and create </li>
+    <li>Create a bucket to store athena results </li>
+    <li>Athena - query editor, Settings - browse s3 and select the results bucket and save</li>
+    <li>type the query- CREATE DATABASE athenadb</li>
+    <li>Copy the commands from resources section </li>
+    <li>Edit location - copy the s3 url till/AWSLogs/number/ and run </li>
+    <li>See the table created </li>
+    <li>Again copy the query from resources and run it </li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<h2>Creating an OpenSearch Service domain </h2>
+<ul>
+    <li>Create an Opensearch domain </li>
+    <li>Make our cluster publically accessible </li>
+    <li>Connect to our public endpoint </li>
+    <li>Opensearch -> name, standard create method, template- prod, deploy - domain with standby,</li>
+    <li>data nodes - large, ebs storage size - 10 Gib </li>
+    <li>Network - public access , master user - give name and pass </li>
+    <li>Access policy - fst option and create </li>
+    <li>See 3 master and 3 data nodes and click on domain endpoint and sign in </li>
+    <li>Cluster config - edit, we canot remove public endpoint </li>
+    <li>Delete the domain</li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<h2>Leveraging presigned URLs with S3</h2>
+<ul>
+    <li>Create an s3 bucket and upload a file </li>
+    <li>Create a presigned URL - select the object and from Actions menu select share with presigned url </li>
+    <li>Test the presigned url- attempt to access the file using the url </li>
+    <li>Try to access anonymously - see an access denied message </li>
+    <li>S3- name and create </li>
+    <li>upload any file </li>
+    <li>select the file and click actions and select share with presigned url </li>
+    <li>interval 5 mins and copy paste the url </li>
+    <li>copy paste the object url and see access is denied </li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<h2>Using S3 Inventory </h2>
+<ul>
+    <li>Create 2 s3 buckets - one stores inventory and another stores objects </li>
+    <li>upload some files to the second bucket </li>
+    <li>Configure inventory and review the options . It takes upto 48 hrs for the inventory to appear </li>
+    <li>s3 - fst bucket and create </li>
+    <li>s3 - scnd bucket and create </li>
+    <li>upload files to 2nd bucket </li>
+    <li>select the management tab , create inventory config - name, and select dest- fst bucket , specify encryption </li>
+    <li>select some fields - size, replication and encryption </li>
+    <li>Go to fst bucket until you get to data folder , select one and download </li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<h2>Using AWS Config with S3</h2>
+<ul>
+    <li>Navigate to aws config, review managed rules for s3 </li>
+    <li>Rules - prohibit public red and write access </li>
+    <li>AWS config - one click setup, rule , search - s3-bucket-publc,s3-bucket-version,s3-bucket-server </li>
+    <li>select any and create rule </li>
+    
+</ul>
+<h2>Using AWS Backup</h2>
+<ul>
+    <li>Create an EFS file system </li>
+    <li>Configure a backup plan and run an on-demand backup </li>
+    <li>EFS -> Create file system -> name ad create </li>
+    <li>Backup -> create plan -> daily 35day  retention ,give a name , select the daily backup rule and eit</li>
+    <li>Add a tage and save the rule and create plan </li>
+    <li>Assign resources - name, default role, include secifi resource - efs and select the file system </li>
+    <li>Protected resources - create on demand plan ,type - efs and select file id , create backup now , retention- 1 day </li>
+    <li>Backup point - shows the recovery point id </li>
+    <li>First delete recovery point id , resource assignment ,backup plan , efs and delete </li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<h1> Section- Reliability and Business Continuity</h1>
+<h2>Creating Auto Scaling Plans</h2>
+<ul>
+    <li>Set ec2 config using launch templates </li>
+    <li>create ASG and a plan that has ability to override the settings in our ASG</li>
+    <li>EC2- launch template - create, give a name, os - amazon linux , t3.micro, new key pair , default sec grp and create </li>
+    <li>ASG- name, template, az- 1a,1b , Group size- desired - 2,min -2, max-5, tag and create </li>
+    <li>Go to EC2 and see 2 instances being launched </li>
+    <li>AWS auto scaling - Plans - create - method - ec2 asg , select the asg , name scaling strategy - custom, uncheck predictive, </li>
+    <li>Scaling -Average cpu util - 25%</li>
+    <li>Click plan and see the plans </li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<h2>Creating and Encrypting RDS Snapshots</h2>
+<ul>
+    <li>Take snapshot of existing rds instance </li>
+    <li>copy the snapshot to same or diff region </li>
+    <li>encrypt while copying and restore</li>
+    <li>RDS- create DB - std create, engine mysql</li>
+    <li>Template - free tier, identifier, name and pass</li>
+    <li>db instance class- burstable , t3.micro </li>
+    <li>Additional config- db name,remove encryption </li>
+    <li>Select actions - take snap and give a name unencrypted </li>
+    <li>copy snapshot,dest- same region ,name,enable encryption and copy </li>
+    <li>select the encryp snap and click restore, single instance , new identifier name, burstable, t3.micro and click restore </li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<h2>Automating EBS Snapshots Using Data Lifecycle Manager </h2>
+<ul>
+    <li>Launch ec2 with ebs attached </li>
+    <li>Create a lifecycle policy within data lifecycle manager </li>
+    <li>Enable cross-region replication for ebs snapshot </li>
+    <li>EC2- name,no key pair, amazon linux, t3.micro,storage add volume - 10Gib</li>
+    <li>Volumes - give name to one with10Gib</li>
+    <li>Lifecycle manager - new policy, target resource type - volume, target resource tags- Name, value </li>
+    <li>Give a desc, default role, policy status- enabled </li>
+    <li>Schedule - name,daily, 24 hrs, starting at 10 mins from current time , ret count 5</li>
+    <li>copy tags from resource </li>
+    <li>Cross region copy enabled </li>
+    <li>Region 1- us east 2, expire every 3 days , copy tags and create </li>
+    <li>takes about an hour schedules - show snapshot </li>
+    <li>delete snapshot in both areas, lifecyle manager- delete the policy, delete ec2 </li>
+    <li></li>
+</ul>
+<h1> Section- Security and compliance </h1>
+<h1> Section- Network and Content Delivery</h1>
+<h1> Section- Cost and Performance Optimization</h1>
 
 
 
