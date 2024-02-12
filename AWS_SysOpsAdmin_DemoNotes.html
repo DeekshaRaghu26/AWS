@@ -210,6 +210,10 @@ EC2 Image builder
     <li>cd /opt/aws/amazon-cloudwatch-agent/bin </li>
     <li> ls</li>
     <li> cat config.json</li>
+    Run agent as root 
+Aggregation interval - 10s
+Metrics at High resolution - 1s
+change to /opt/aws/amazon-cloudwatch-agent/bin
     
     start the cloudwatch agent - enter the command </li>
     config validation succeeded</li>
@@ -381,7 +385,7 @@ EC2 Image builder
     <li>Paste ARN/*</li>
     <li>Add statement and click generate policy. Copy the policy</li>
     <li>Paste the policy and save</li>
-    <li></li>
+    
 </ul>
 <h2>Configuring static website hosting using S3</h2>
 <ul>
@@ -394,11 +398,7 @@ EC2 Image builder
     <li>Properties -> Static website hosting </li>
     <li>Enable , host type - static website and save changes </li>
     <li>Click the statc website URL</li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
+    
 </ul>
 <h2>Configuring encryption on an S3 bucket</h2>
 <ul>
@@ -419,13 +419,13 @@ EC2 Image builder
 </ul>
 <h2>Working with EFS</h2>
 <ul>
-    <li>Create anEFS file system- encryption is enabled by default</li>
+    <li>Create an EFS file system- encryption is enabled by default</li>
     <li>Launch an ec2 instance and install efs utilities </li>
     <li>Create new directory on the instance, mount the efs file system to the new directory and create a file </li>
     <li>EFS-> name, default vpc</li>
     <li>Transition into IA - 30 days </li>
     <li>Select enforce in transit encryption and click create </li>
-    <li>elect file system and click attach</li>
+    <li>Select file system and click attach</li>
     <li>Launch EC2 - create security grp </li>
     <li>EFS - network tab, note the sg id </li>
     <li>SG - edit inbound rules - type - NFS, Source- select the sec grp of ec2 instance and save </li>
@@ -436,12 +436,7 @@ EC2 Image builder
     <li>cd efs/</li>
     <li>sudo touch test.txt </li>
     <li>ls </li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
+    
 </ul>
 <h2>Working with Athena</h2>
 <ul>
@@ -456,9 +451,7 @@ EC2 Image builder
     <li>Edit location - copy the s3 url till/AWSLogs/number/ and run </li>
     <li>See the table created </li>
     <li>Again copy the query from resources and run it </li>
-    <li></li>
-    <li></li>
-    <li></li>
+    
 </ul>
 <h2>Creating an OpenSearch Service domain </h2>
 <ul>
@@ -472,10 +465,7 @@ EC2 Image builder
     <li>See 3 master and 3 data nodes and click on domain endpoint and sign in </li>
     <li>Cluster config - edit, we canot remove public endpoint </li>
     <li>Delete the domain</li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
+    
 </ul>
 <h2>Leveraging presigned URLs with S3</h2>
 <ul>
@@ -488,11 +478,7 @@ EC2 Image builder
     <li>select the file and click actions and select share with presigned url </li>
     <li>interval 5 mins and copy paste the url </li>
     <li>copy paste the object url and see access is denied </li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
+    
 </ul>
 <h2>Using S3 Inventory </h2>
 <ul>
@@ -505,11 +491,7 @@ EC2 Image builder
     <li>select the management tab , create inventory config - name, and select dest- fst bucket , specify encryption </li>
     <li>select some fields - size, replication and encryption </li>
     <li>Go to fst bucket until you get to data folder , select one and download </li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
+    
 </ul>
 <h2>Using AWS Config with S3</h2>
 <ul>
@@ -530,11 +512,7 @@ EC2 Image builder
     <li>Protected resources - create on demand plan ,type - efs and select file id , create backup now , retention- 1 day </li>
     <li>Backup point - shows the recovery point id </li>
     <li>First delete recovery point id , resource assignment ,backup plan , efs and delete </li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
+
 </ul>
 <h1> Section- Reliability and Business Continuity</h1>
 <h2>Creating Auto Scaling Plans</h2>
@@ -547,12 +525,7 @@ EC2 Image builder
     <li>AWS auto scaling - Plans - create - method - ec2 asg , select the asg , name scaling strategy - custom, uncheck predictive, </li>
     <li>Scaling -Average cpu util - 25%</li>
     <li>Click plan and see the plans </li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
+    
 </ul>
 <h2>Creating and Encrypting RDS Snapshots</h2>
 <ul>
@@ -566,10 +539,7 @@ EC2 Image builder
     <li>Select actions - take snap and give a name unencrypted </li>
     <li>copy snapshot,dest- same region ,name,enable encryption and copy </li>
     <li>select the encryp snap and click restore, single instance , new identifier name, burstable, t3.micro and click restore </li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
+   
 </ul>
 <h2>Automating EBS Snapshots Using Data Lifecycle Manager </h2>
 <ul>
@@ -586,11 +556,47 @@ EC2 Image builder
     <li>Region 1- us east 2, expire every 3 days , copy tags and create </li>
     <li>takes about an hour schedules - show snapshot </li>
     <li>delete snapshot in both areas, lifecyle manager- delete the policy, delete ec2 </li>
-    <li></li>
+    
 </ul>
 <h1> Section- Security and compliance </h1>
 <h1> Section- Network and Content Delivery</h1>
 <h1> Section- Cost and Performance Optimization</h1>
+<h2>Create an AWS Budget and Billing Alarm</h2>
+<ul>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<h2>Performance analysis using RDS Performance Insights </h2>
+<ul>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
 
 
 
