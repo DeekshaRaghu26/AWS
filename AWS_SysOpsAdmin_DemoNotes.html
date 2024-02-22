@@ -559,17 +559,77 @@ change to /opt/aws/amazon-cloudwatch-agent/bin
     
 </ul>
 <h1> Section- Security and compliance </h1>
-<h1> Section- Network and Content Delivery</h1>
-<h1> Section- Cost and Performance Optimization</h1>
-<h2>Create an AWS Budget and Billing Alarm</h2>
+<h2>Creating Custom IAM policies and Roles </h2>
 <ul>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
+    <li>IAM -> Policy -> Create policy</li>
+    <li>Visual -> service -> s3 </li>
+    <li>List actions - Select all</li>
+    <li>Read - all</li>
+    <li>Resources - all </li>
+    <li>Click next, give name and desc and create policy</li>
+    <li>Create a role and assign that policy </li>
+    <li>Create an ec2 instance with role assigned</li>
+    <li>create an s3 bucket </li>
+    <li>connect to the ec2 instance </li>
+    <li>aws s3 ls</li>
+    <li>echo " this is a test" > hello.text</li>
+    <li>aws s3 cp hello.txt s3://bucket name </li>
+    <li>edit policy - select put obj and putobjacl</li>
+    <li>save change </li>
+
+</ul>
+<h2>Enabling MFA and reporting with IAM</h2>
+<ul>
+    <li>IAM -> MFA</li>
+    <li>Add mfa -> assign mfa</li>
+    <li>name , authenticator app</li>
+    <li>download the authenticator</li>
+    <li>show qr code</li>
+    <li>open the qr code and scan it</li>
+    <li>fill the two codes and click add mfa </li>
+    <li>log out and log back in, it asks for mfa <code></code></li>
+    <li>Create a user and group with admin access</li>
+    <li>Add that user to group</li>
+    <li>Access reports -> Credential report</li>
+    <li>Download the credential reporting</li>
+
+</ul>
+<h2>Auditing & Troubleshooting Access Issues </h2>
+<ul>
+    <li>IAM Access Analyzer -> create and change s3 bucket permissions</li>
+    <li>IAM policy simulator -> select service and actions and select the particular user and run simulation </li>
+    <li>CloudTrail -> Create trails and see events history</li>
+    
+</ul>
+<h2>AWS WAF </h2>
+<ul>
+    <li>Create an API through API Gateway</li>
+    <li>Use AWS WAF to create a web ACL to block traffic coming from our location</li>
+    <li>API Gateway -> REST API -> Build</li>
+    <li>Select okay , protocal -> Rest and select import</li>
+    <li>Actions -> Delpoy API </li>
+    <li>New stage , testing and deploy</li>
+    <li>Click on Invoke URL</li>
+    <li>WAF -> Create web ACL </li>
+    <li>Give name, desc , add aws resources -> api gate way </li>
+    <li>select our api and add</li>
+    <li>Add rules -> my own rules and groups </li>
+    <li>rule name, if req - matches a statement</li>
+    <li>inspects - originates a country in country code - GB</li>
+    <li>Add rule and create </li>
+    
+</ul>
+<h2>Understanding Service Quotas</h2>
+<ul>
+    <li>Service quotas -> AWS services </li>
+    <li>Type vpc in search box and see the quotas </li>
+    <li>Select a quota name and click request quota </li>
+    <li>Select quota request history to see the past request quotas </li>
+    <li>Trusted Advisor -> Service limits to view the limits </li>
+    
+</ul>
+<h2>Introducing AWS Security Hub</h2>
+<ul>
     <li></li>
     <li></li>
     <li></li>
@@ -579,7 +639,7 @@ change to /opt/aws/amazon-cloudwatch-agent/bin
     <li></li>
     <li></li>
 </ul>
-<h2>Performance analysis using RDS Performance Insights </h2>
+<h2>Working with Amazon GuardDuty</h2>
 <ul>
     <li></li>
     <li></li>
@@ -589,13 +649,46 @@ change to /opt/aws/amazon-cloudwatch-agent/bin
     <li></li>
     <li></li>
     <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
+</ul>
+<h1> Section- Network and Content Delivery</h1>
+<h1> Section- Cost and Performance Optimization</h1>
+<h2>Create an AWS Budget and Billing Alarm</h2>
+<ul>
+    <li>Enable billing alert through the Billing Dashboard</li>
+    <li>Configure an AWS Budget</li>
+    <li>Create a billing alarm in Cloudwatch </li>
+    <li>Configure an email alert </li>
+    <li>Click profile name -> Billing Dashboard -> Billing preference -> enable receive alerts and Save </li>
+    <li>AWS Budgets -> Create -> Use template -> Monthly cost -> enter budget name -> Amount, email and create </li>
+    <li>Cloudwatch -> Alarms -> Billing -> Create alarm, select metric, Billing, Total est charge -> select USD and select metric</li>
+    <li>Conditions: Greater than 0 dollar,click next, Create new SNS topic - enter name and email, enter alarm name and create </li>
+
+</ul>
+<h2>Using metrics to Improve Performance and costs </h2>
+<ul>
+    <li>Cloudwatch -> Metrics -> All metric -> Billing -> By service -> EC2</li>
+    <li>Type - Custom, Duration - 4 weeks select it and click Actions -> Add to Dashboard -> enter name and create </li>
+    <li>Widget type -> Line, enter widget title and create </li>
+    
+</ul>
+
+<h2>Performance analysis using RDS Performance Insights </h2>
+<ul>
+    <li>Monitor Database load </li>
+    <li>Download and install pgadmin</li>
+    <li>Launch RDS instance and Analyze data </li>
+    <li>RDS -> Create DB, Standard create, Engine- Postgre sql, Free tier</li>
+    <li>Enter master password and confirm</li>
+    <li>Enable burstable classes, type- t3.micro</li>
+    <li>Give public access and select availability zones</li>
+    <li>Select the DB -> Select security group, edit inbound rules, Postgresql, source- anywhere ipv4</li>
+    <li>pgadmin-> Reset password, click yes</li>
+    <li>Sever -> right click, register, enter nam, host address -> the endpoint and port from connectivity ad security</li>
+    <li>Port - 5432 and enter password </li>
+    <li>Select postgres right click -> select query tool</li>
+    <li>Run a query by clicking the play button </li>
+    <li>SELECT * from cloud_users</li>
+    <li>RDS-> Performance insights, select the DB , time range </li>
 </ul>
 
 
